@@ -1,0 +1,14 @@
+[
+    {
+        "name":"1 tomato",
+        "path":"assets/tomato.jpg"
+    },
+    {
+        "name":"1 potato",
+        "path": "assets/potato.jpg"
+    },
+    {
+        "name":"1 egg",
+        "path":"assets/egg.jpg"
+    }
+]

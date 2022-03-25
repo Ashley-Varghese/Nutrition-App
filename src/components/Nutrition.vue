@@ -12,7 +12,7 @@
 
   <div >
   <div class= "form" style="display:flex">
-    <label style="margin-left:auto" for="qty">Quantity</label>
+    <label  for="qty">Quantity</label>
     <input type="number" id=qty class="inputs" v-model="qty">
     <br>
 
@@ -29,6 +29,7 @@
 
     <label for="food">Food item</label>
     <input type="text" id="food" class="inputs" v-model="food"> 
+    <br>
 
     <button id="add-btn" class="btn-warning"  @click="add" style="width:75px"> Add </button>
 
@@ -233,20 +234,23 @@ export default {
 }
 
 .form{
+  
   display: flex;
+  justify-content: center;
   flex-flow: row wrap;
   align-items: center;
 }
+
 #add-btn{
-  margin-right: auto;
+  padding: 3px 3px;
+  background-color:lightgreen;
 }
 
-label {
-  margin-left: auto;
-  margin-right: auto;
+ #firstLabel{
+  margin-right:auto;
   width:auto;
-
 }
+
 span{
   min-width:100px;
 }
@@ -355,10 +359,13 @@ th {
 
 @media screen and (max-width: 650px) {
  .form {
-   width: 100%;
+   width: 85%;
     margin-top: 0;
     flex-direction: column;
     align-items: stretch;
+  }
+  #add-btn{
+    padding: 3px 3px 3px 3px 0;
   }
   }
 

@@ -21,7 +21,7 @@ npm run lint
 ```
 
 ### Technology stack used
-Vue js 3 was used to create this web application, with CSS 2 and Bootstrap 5
+Vue js 3 was used to create this web application, with CSS 2 and Bootstrap 4
 
 ### Naming conventions  used:  
 Pascal Case has been used for component names, whereas all methods/variables use Camel case. 

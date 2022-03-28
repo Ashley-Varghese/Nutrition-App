@@ -2,7 +2,8 @@
 <head>
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
-  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.2.1/dist/css/bootstrap.min.css" integrity="sha384-GJzZqFGwb1QTTN6wy59ffF1BuGJpLSa9DkKMp0DgiMDm4iYMj70gZWKYbI706tWS" crossorigin="anonymous">
+  
+  
 </head> 
  
  <h2>
@@ -12,7 +13,7 @@
 
   <div >
   <div class= "form" style="display:flex">
-    <label  for="qty">Quantity</label>
+    <label  for="qty" data-toggle="tooltip" title="Hooray!" >Quantity </label>
     <input type="number" id=qty class="inputs" v-model="qty">
     <br>
 
@@ -31,21 +32,24 @@
     <input type="text" id="food" class="inputs" v-model="food"> 
     <br>
 
-    <button id="add-btn" class="btn-warning"  @click="add" style="width:75px"> Add </button>
+    <button id="" class="btn btn-primary"  @click="add" style="width:75px"> Add </button>
 
   </div> 
   <br>
  
  <div class="" >
   <table >
-    <tr class="newrow" v-for="s in searchList" :key="s"> <span>{{s+" "}} </span>  <button class="delete-btn" @click="deleteItem(s)"><i class="fa fa-trash"></i></button></tr>
+    <tr class="newrow" v-for="s in searchList" :key="s">
+     <td>{{s+" "}} </td> 
+     <td><button class="delete-btn" @click="deleteItem(s)"><i class="fa fa-trash"></i></button></td>
+    </tr>
   </table>
   </div>
 
   <br>
   <br>
 
-  <button  id="pulser" value="Submit" @click="submit">Submit</button>
+  <button class="btn btn-primary" id="pulser" value="Submit" @click="submit">Submit</button> 
 
   </div>
   <br>
@@ -131,11 +135,16 @@
 
 </template>
 
-<script> 
+<script>  
+
 //api-id =4cc00ec3
 //api-key=3ffd1eb7d2245ac2cf44739c395c9ff0, 862787ee84da281d5b0b31e3a70df086	
 import Axios from 'axios'
-import paths from "../assets/pathlist.json"
+import paths from "../assets/pathlist.json" 
+
+//tooltip initialization
+
+
 
 export default {
   setup () {
@@ -234,7 +243,6 @@ export default {
 }
 
 .form{
-  
   display: flex;
   justify-content: center;
   flex-flow: row wrap;
@@ -244,6 +252,10 @@ export default {
 #add-btn{
   padding: 3px 3px;
   background-color:lightgreen;
+}
+
+label{
+  color: indianred;
 }
 
  #firstLabel{
@@ -280,10 +292,6 @@ h2{
 }
 p{
   color: seagreen;
-}
-
-b{
-  color:coral;
 }
 
 .container {

@@ -3,81 +3,18 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
   
-  
 </head> 
  
  <h2>
    Recipe Analyzer
  </h2>
- <br>
+ <br> 
 
-  <div >
-  <div class= "form" style="display:flex">
-    <label  for="qty" data-toggle="tooltip" title="Hooray!" >Quantity </label>
-    <input type="number" id=qty class="inputs" v-model="qty">
-    <br>
+ <div class="main-div" style="display:flex;justify-content:center;" >
 
-    <label for="unit">Unit</label> 
-    <select class="inputs" name="" id="unit" v-model="unit">
-      <option value="cup">Cup</option>
-      <option value="ounce">Ounce (oz)</option>
-      <option value="pinch">Pinch</option>
-      <option value="tablespoon">Tablespoon</option>
-      <option value="teaspoon">Teaspoon</option>
-      <option value="pint">Pint</option>
-    </select>
-    <br>
-
-    <label for="food">Food item</label>
-    <input type="text" id="food" class="inputs" v-model="food"> 
-    <br>
-
-    <button id="" class="btn btn-primary"  @click="add" style="width:75px"> Add </button>
-
-  </div> 
-  <br>
- 
- <div class="" >
-  <table >
-    <tr class="newrow" v-for="s in searchList" :key="s">
-     <td>{{s+" "}} </td> 
-     <td><button class="delete-btn" @click="deleteItem(s)"><i class="fa fa-trash"></i></button></td>
-    </tr>
-  </table>
-  </div>
-
-  <br>
-  <br>
-
-  <button class="btn btn-primary" id="pulser" value="Submit" @click="submit">Submit</button> 
-
-  </div>
-  <br>
-  <div v-if="loading1===true">
-        <div class="spinner-border text-success" role="status">
-        <span class="sr-only">Loading...</span>
-        </div>
-      </div>
-
-  <div class="container" v-else-if="Object.keys(post_response).length!==0">
-    <table>
-    <tr > <b> Calories: {{post_response.calories}} </b> </tr> 
-     <tr> <b> Weight : {{post_response.totalWeight}} g </b> </tr>
-     <b>
-      <tr v-for="l in post_response.dietLabels" :key="l">
-        {{l}}
-      </tr> 
-      </b>
-
-    </table>
-  </div>
-  <br>
-   <br>
-   <br>
-  <p>Nutritional Facts about common food items: </p>
-  <br>
-
-  <div class="container">
+ <div class="card" style="width:40rem;padding:4px 4px 4px 4px;">
+  <div class="card-body">
+    <div class="container">
 
   <table class="centred">
     <th>Food Item List</th>
@@ -106,7 +43,7 @@
     </th>
 
     <tr>
-       <div class="card" @click="getFacts('1 tomato')">
+       <div class="table-card" @click="getFacts('1 tomato')">
         <p >
           <em> Tomato</em> 
         
@@ -115,7 +52,7 @@
     </tr> 
 
     <tr>
-       <div class="card" @click="getFacts('1 egg')">
+       <div class="table-card" @click="getFacts('1 egg')">
     <p >
       <em> Egg</em>
       </p>
@@ -123,7 +60,7 @@
     </tr>
 
     <tr>
-       <div class="card" @click="getFacts('1 potato')">
+       <div class="table-card" @click="getFacts('1 potato')">
        <p >
          <em> Potato</em>
          </p>
@@ -132,6 +69,108 @@
   </table>
 
   </div>
+  </div>
+</div> 
+
+
+<div class="card" style="width: 30rem;">
+  <div class="card-body">
+    
+  <div >
+  <div class= "form-group">
+    <label  for="qty" data-toggle="tooltip" title="Hooray!" >Quantity </label>
+    <input type="number" id=qty class="form-control" v-model="qty">
+    <br>
+
+    <label for="unit">Unit</label> 
+    <select class="form-control" name="" id="unit" v-model="unit">
+      <option value="cup">Cup</option>
+      <option value="ounce">Ounce (oz)</option>
+      <option value="pinch">Pinch</option>
+      <option value="tablespoon">Tablespoon</option>
+      <option value="teaspoon">Teaspoon</option>
+      <option value="pint">Pint</option>
+    </select>
+    <br>
+
+    <label for="food">Food item</label>
+    <input type="text" id="food" class="form-control" v-model="food"> 
+    <br>
+
+    <button id="" class="btn btn-primary"  @click="add" style="width:75px"> Add </button>
+
+  </div>
+  </div> 
+
+</div>
+</div>
+  <br> 
+
+</div>
+<br>
+
+<div class="table table-sm table-bordered table-dark" >
+  <table >
+    <tr class="newrow" v-for="s in searchList" :key="s">
+     <td>{{s+" "}} </td> 
+     <td class="bg-danger"><button class="delete-btn" @click="deleteItem(s)"><i class="fa fa-trash"></i></button></td>
+    </tr>
+  </table>
+  </div>
+
+  <br>
+  <br>
+
+  <button class="btn btn-primary" id="pulser" data-toggle="modal" data-target="#exampleModalCenter" value="Submit" @click="submit">Submit</button>
+
+  <br>
+  <br>
+  
+
+  <div class="modal fade" id="exampleModalCenter" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="exampleModalLongTitle">Results of Recipe analysis</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body"> 
+
+        <div v-if="loading1===true">
+        <div class="spinner-border text-success" role="status">
+        <span class="sr-only">Loading...</span>
+        </div>
+      </div> 
+
+        <div class="container" v-else-if="Object.keys(post_response).length!==0">
+         <table>
+          <tr > <b> Calories: {{post_response.calories}} </b> </tr> 
+          <tr> <b> Weight : {{post_response.totalWeight}} g </b> </tr>
+         <b>
+         <tr v-for="l in post_response.dietLabels" :key="l">
+        {{l}}
+      </tr> 
+      </b>
+
+    </table>
+  </div>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+        
+      </div>
+    </div>
+  </div>
+</div>
+  
+
+  <br>
+   <br>
+   <br>
+  <p>Nutritional Facts about common food items: </p>
+  <br>
 
 </template>
 
@@ -242,11 +281,9 @@ export default {
   padding: 5px;
 }
 
-.form{
-  display: flex;
+main-div{
+  display: flexbox;
   justify-content: center;
-  flex-flow: row wrap;
-  align-items: center;
 }
 
 #add-btn{
@@ -302,7 +339,7 @@ p{
      /*margin-left:240px; */
  } 
 
-.card {
+.table-card {
 color: darkcyan;
 border: 2px solid goldenrod;
 padding: 10px;
@@ -311,7 +348,7 @@ margin: 10px;
 }
 
 table {
-    border: 0px solid slateblue;
+    border: 2px solid slateblue;
     display: inline-block;
 }
 

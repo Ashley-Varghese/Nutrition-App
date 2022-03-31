@@ -2,17 +2,17 @@
 <head>
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
-  
+  <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
 </head> 
  
  <h2>
-   Recipe Analyzer
+   <b> Recipe Analyzer </b> 
  </h2>
  <br> 
-
- <div class="main-div" style="display:flex;justify-content:center;" >
-
- <div class="card" style="width:40rem;padding:4px 4px 4px 4px;">
+<div class="container">
+ <div class="row">
+<div class="col-lg-7 col-md-8 col-sm-10">
+   <div class="card " style="padding:4px 4px 4px 4px;"> 
   <div class="card-body">
     <div class="container">
 
@@ -20,25 +20,20 @@
     <th>Food Item List</th>
     <th rowspan="4" class="panel">
       <br>
-      <p v-if="Object.keys(get_response).length===0" style="color:darkslateblue">
+      <p v-if="Object.keys(get_response).length===0"  style="padding:80px 20px">
          Select a food item from the list to see its analysis in this panel
       </p>
 
-      <div v-else-if="loading===true">
-        <div class="spinner-border text-danger" role="status">
-        <span class="sr-only">Loading...</span>
-        </div>
-      </div>
-
       <div  class="results" v-else-if="Object.keys(get_response).length!==0"> 
-        <table>
-      <tr>Calories: {{get_response.calories}}</tr>
-      <tr> Weight: {{get_response.totalWeight}} g</tr>
-      <tr v-for="l in get_response.dietLabels" :key="l">
-        {{l}}
-      </tr> 
-      </table>
-       <img class="foodImage" :src="require(`@/${src}`)" >
+        <img class="foodImage" :src="require(`@/${src}`)" >
+        <table class="centred">
+         <tr>Calories: {{get_response.calories}}</tr>
+         <tr> Weight: {{get_response.totalWeight}} g</tr>
+         <tr v-for="l in get_response.dietLabels" :key="l">
+           {{l}}
+        </tr> 
+       </table>
+       
     </div>
     </th>
 
@@ -71,19 +66,18 @@
   </div>
   </div>
 </div> 
+</div>
 
-
-<div class="card" style="width: 30rem;">
+<div class="col-lg-5 col-md-8 col-sm-10">
+    <div class="card" > 
   <div class="card-body">
     
-  <div >
   <div class= "form-group">
     <label  for="qty" data-toggle="tooltip" title="Hooray!" >Quantity </label>
-    <input type="number" id=qty class="form-control" v-model="qty">
-    <br>
+    <input type="number" class="form-control mb-1" min="1" v-model="qty">
 
     <label for="unit">Unit</label> 
-    <select class="form-control" name="" id="unit" v-model="unit">
+    <select class="form-control mb-1" name="" id="unit" v-model="unit">
       <option value="cup">Cup</option>
       <option value="ounce">Ounce (oz)</option>
       <option value="pinch">Pinch</option>
@@ -91,43 +85,40 @@
       <option value="teaspoon">Teaspoon</option>
       <option value="pint">Pint</option>
     </select>
-    <br>
 
     <label for="food">Food item</label>
     <input type="text" id="food" class="form-control" v-model="food"> 
-    <br>
-
-    <button id="" class="btn btn-primary"  @click="add" style="width:75px"> Add </button>
+<br>
+    <button id="" class="btn btn-info"  @click="add" style="width:75px"> Add </button>
 
   </div>
   </div> 
 
 </div>
 </div>
-  <br> 
-
 </div>
+</div>
+  <br> 
 <br>
-
-<div class="table table-sm table-bordered table-dark" >
-  <table >
-    <tr class="newrow" v-for="s in searchList" :key="s">
+<h5 v-if="searchList.length===0">Enter some ingredients in the form to add to the  list, and then submit for analysis</h5>
+<h4 v-if="searchList.length!==0">Ingredient List :</h4>
+<br>
+  <table id="ingredient-list" class="table table-light"  >
+    <tr class="" v-for="s in searchList" :key="s" >
      <td>{{s+" "}} </td> 
-     <td class="bg-danger"><button class="delete-btn" @click="deleteItem(s)"><i class="fa fa-trash"></i></button></td>
+     <td class="" style="width:1rem"><i class="fa fa-trash" style="font-size:20px" @click="deleteItem(s)"></i></td>
     </tr>
   </table>
-  </div>
-
   <br>
   <br>
 
-  <button class="btn btn-primary" id="pulser" data-toggle="modal" data-target="#exampleModalCenter" value="Submit" @click="submit">Submit</button>
+  <button v-if="searchList.length!==0" class="btn btn-primary"  data-toggle="modal" data-target="#resultsModal" value="Submit" @click="submit">Submit</button>
 
   <br>
   <br>
   
 
-  <div class="modal fade" id="exampleModalCenter" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+  <div class="modal fade" id="resultsModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
   <div class="modal-dialog modal-dialog-centered" role="document">
     <div class="modal-content">
       <div class="modal-header">
@@ -137,24 +128,25 @@
         </button>
       </div>
       <div class="modal-body"> 
-
+        <b style="color:darkorchid">No of ingredients : {{searchList.length}}</b>
+        <p data-toggle="tooltip" data-placement="top" title="Tooltip on top"> </p>
         <div v-if="loading1===true">
         <div class="spinner-border text-success" role="status">
         <span class="sr-only">Loading...</span>
         </div>
       </div> 
 
-        <div class="container" v-else-if="Object.keys(post_response).length!==0">
-         <table>
+    <div class="container" v-else-if="Object.keys(post_response).length!==0">
+         <table class="centred">
           <tr > <b> Calories: {{post_response.calories}} </b> </tr> 
-          <tr> <b> Weight : {{post_response.totalWeight}} g </b> </tr>
+          <tr> <b> Weight : {{round(post_response.totalWeight)}} g </b> </tr>
          <b>
          <tr v-for="l in post_response.dietLabels" :key="l">
         {{l}}
       </tr> 
       </b>
 
-    </table>
+        </table>
   </div>
       </div>
       <div class="modal-footer">
@@ -163,13 +155,9 @@
       </div>
     </div>
   </div>
-</div>
+</div> 
   
-
   <br>
-   <br>
-   <br>
-  <p>Nutritional Facts about common food items: </p>
   <br>
 
 </template>
@@ -178,14 +166,18 @@
 
 //api-id =4cc00ec3
 //api-key=3ffd1eb7d2245ac2cf44739c395c9ff0, 862787ee84da281d5b0b31e3a70df086	
-import Axios from 'axios'
-import paths from "../assets/pathlist.json" 
 
-//tooltip initialization
+import paths from "@/assets/pathlist.json" 
+import Axios from 'axios' 
+//import FoodItemList from './Food_Item_List/FoodItemList.vue'
+//import IngredientsForm from './Ingredients_Form/IngredientsForm.vue'
+
+
 
 
 
 export default {
+  components: { },
   setup () {
     return {
     }
@@ -195,11 +187,11 @@ export default {
     return {
       app_id:"4cc00ec3",
       app_key:'3ffd1eb7d2245ac2cf44739c395c9ff0',
-      plist : paths,
+      err:'',
       src:'',
+      plist : paths,
       loading1:false,
       loading:false,
-      err:'',
       qty:0,
       unit:'',
       food:'',
@@ -207,33 +199,41 @@ export default {
       searchList:[] ,
       post_data :{
         "ingr":[]
-      },
-      post_response:{},
-      get_response:{}
+         },
+       post_response:{},
+       get_response:{}
     }
   },
 
-  /*validations : {
-    qty: { required, minValue:0}
-  },*/
-
-  methods: {
-    add() {
+  methods: 
+        {   
+           add() { 
+      if(this.qty!==0 && this.unit!=='' && this.food!=='' ) {
       this.searchItem= this.qty +" "+ this.unit +" "+ this.food;
+      
       this.searchList.push(this.searchItem);
+      }
+      else {
+        alert("Enter a value for each field before adding");
+      }
     }, 
 
-    deleteItem(foodItem) {
-      this.searchList=this.searchList.filter(function(value){
-        return !(value===foodItem);
-       }); 
-    },
+       deleteItem(foodItem) { 
+          alert('The item "'+foodItem+'" is going to be deleted');
+          this.searchList=this.searchList.filter(function(value){
+          return !(value===foodItem);
+         }); 
+      },
 
-    submit () {
+      round(n){
+         return n.toFixed(2);
+      },
+
+      submit () {
       
-      this.post_data.ingr=this.searchList;
-      this.loading1=true;
-      Axios.post("https://api.edamam.com/api/nutrition-details?app_id="+this.app_id+"&app_key="+this.app_key, this.post_data).then(response=> { 
+        this.post_data.ingr=this.searchList;
+        this.loading1=true;
+        Axios.post("https://api.edamam.com/api/nutrition-details?app_id="+this.app_id+"&app_key="+this.app_key, this.post_data).then(response=> { 
              console.log('SUCCESS', response.data);
              this.post_response=response.data;
              this.loading1=false;
@@ -241,10 +241,10 @@ export default {
              });
     },
 
-    getFacts(ingr){
-       this.loading=true;
-       this.src=this.getPath(ingr);
-       Axios.get("https://api.edamam.com/api/nutrition-data?app_id="+this.app_id+"&app_key="+this.app_key + "&nutrition-type=cooking&ingr="+ingr).then(response=> {
+            getFacts(ingr){
+            this.loading=true;
+            this.src=this.getPath(ingr);
+            Axios.get("https://api.edamam.com/api/nutrition-data?app_id="+this.app_id+"&app_key="+this.app_key + "&nutrition-type=cooking&ingr="+ingr).then(response=> {
                 this.get_response=response.data;
                 this.loading=false;
             }).catch(err=> {
@@ -253,37 +253,46 @@ export default {
                 console.log('Error',err);
             });
 
-    },
+              },
 
-    getPath (foodname) {
+              getPath (foodname) {
               var path = "";
              // console.log("blank");
               this.plist.forEach(element => {
                    if(element.name===foodname)
                    {
                        path= element.path;
-                       console.log("This is: " +path);
+                       console.log("Path: " +path);
                    }
                    
                });
                return path;
           }
-   
-  }
+        }
+
 }
 
 </script>
 
 <style >
-.inputs{
-  margin-left: 15px;
-  margin-right: 15px;
-  padding: 5px;
-}
 
 main-div{
   display: flexbox;
   justify-content: center;
+}
+
+ .centred {
+     color: darkred;
+     margin-left:auto; 
+     margin-right:auto;
+ }
+
+ .table-card {
+color: rgb(139, 130, 0);
+border: 1px solid goldenrod;
+padding: 10px;
+width: 200px;
+margin: 10px;
 }
 
 #add-btn{
@@ -298,10 +307,6 @@ label{
  #firstLabel{
   margin-right:auto;
   width:auto;
-}
-
-span{
-  min-width:100px;
 }
 
 #pulser {
@@ -324,9 +329,15 @@ span{
 h2{
   color:lightseagreen;
   text-transform: capitalize;
-  text-decoration: underline;
   
 }
+
+#ingredient-list{
+  width:16rem;
+  margin-left:auto; 
+  margin-right:auto;
+}
+
 p{
   color: seagreen;
 }
@@ -339,26 +350,9 @@ p{
      /*margin-left:240px; */
  } 
 
-.table-card {
-color: darkcyan;
-border: 2px solid goldenrod;
-padding: 10px;
-width: 250px;
-margin: 10px;
-}
-
-table {
-    border: 2px solid slateblue;
-    display: inline-block;
-}
-
 .results {
   border: 0px solid darkseagreen;
   align-self: center;
-}
-
-td {
-    border: 2px solid goldenrod;
 }
 
 .newrow {
@@ -369,48 +363,45 @@ td {
   border: 0px;
   background-color: antiquewhite;
 }
- tr:hover {
+
+ /* tr:hover {
   border: 3px solid gold;
   background-color: aqua;
   color:darkred;
-}
+} */
 
-th {
-    border: 3px solid royalblue;
-    background-color: aquamarine;    
-} 
-
- .centred {
-     margin-left:auto; 
-     margin-right:auto;
- }
+ 
 
  .panel{
    justify-content: center;
-   border: 2px solid springgreen;
-   background-color:powderblue;
+   align-content: center;
+   align-items: center;
    color:darkorchid;
    width: 220px;
  } 
 
  img{
    width: 160px;
-   height: auto;
+   height: 120px;
  }
 
  * {
   box-sizing: border-box;
 }
 
-@media screen and (max-width: 650px) {
+@media screen and (max-width: 900px) {
  .form {
-   width: 85%;
+   width: 90%;
     margin-top: 0;
     flex-direction: column;
     align-items: stretch;
   }
   #add-btn{
     padding: 3px 3px 3px 3px 0;
+  }
+  .card{
+    margin-top: 30px;
+    padding: 20px 20px 20px 20px;
   }
   }
 

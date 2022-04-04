@@ -1,7 +1,7 @@
 <template>
 <head>
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+  
   <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
 </head> 
  
@@ -12,151 +12,19 @@
 <div class="container">
  <div class="row">
 <div class="col-lg-7 col-md-8 col-sm-10">
-   <div class="card " style="padding:4px 4px 4px 4px;"> 
-  <div class="card-body">
-    <div class="container">
-
-  <table class="centred">
-    <th>Food Item List</th>
-    <th rowspan="4" class="panel">
-      <br>
-      <p v-if="Object.keys(get_response).length===0"  style="padding:80px 20px">
-         Select a food item from the list to see its analysis in this panel
-      </p>
-
-      <div  class="results" v-else-if="Object.keys(get_response).length!==0"> 
-        <img class="foodImage" :src="require(`@/${src}`)" >
-        <table class="centred">
-         <tr>Calories: {{get_response.calories}}</tr>
-         <tr> Weight: {{get_response.totalWeight}} g</tr>
-         <tr v-for="l in get_response.dietLabels" :key="l">
-           {{l}}
-        </tr> 
-       </table>
-       
-    </div>
-    </th>
-
-    <tr>
-       <div class="table-card" @click="getFacts('1 tomato')">
-        <p >
-          <em> Tomato</em> 
-        
-          </p>
-       </div>
-    </tr> 
-
-    <tr>
-       <div class="table-card" @click="getFacts('1 egg')">
-    <p >
-      <em> Egg</em>
-      </p>
-      </div>
-    </tr>
-
-    <tr>
-       <div class="table-card" @click="getFacts('1 potato')">
-       <p >
-         <em> Potato</em>
-         </p>
-       </div>
-    </tr>
-  </table>
-
-  </div>
-  </div>
-</div> 
+  <food-item-list />
 </div>
 
 <div class="col-lg-5 col-md-8 col-sm-10">
-    <div class="card" > 
-  <div class="card-body">
-    
-  <div class= "form-group">
-    <label  for="qty" data-toggle="tooltip" title="Hooray!" >Quantity </label>
-    <input type="number" class="form-control mb-1" min="1" v-model="qty">
-
-    <label for="unit">Unit</label> 
-    <select class="form-control mb-1" name="" id="unit" v-model="unit">
-      <option value="cup">Cup</option>
-      <option value="ounce">Ounce (oz)</option>
-      <option value="pinch">Pinch</option>
-      <option value="tablespoon">Tablespoon</option>
-      <option value="teaspoon">Teaspoon</option>
-      <option value="pint">Pint</option>
-    </select>
-
-    <label for="food">Food item</label>
-    <input type="text" id="food" class="form-control" v-model="food"> 
-<br>
-    <button id="" class="btn btn-info"  @click="add" style="width:75px"> Add </button>
-
-  </div>
-  </div> 
-
-</div>
+    <ingredients-form  @sendIngredient="add" />
 </div>
 </div>
 </div>
   <br> 
+
 <br>
-<h5 v-if="searchList.length===0">Enter some ingredients in the form to add to the  list, and then submit for analysis</h5>
-<h4 v-if="searchList.length!==0">Ingredient List :</h4>
-<br>
-  <table id="ingredient-list" class="table table-light"  >
-    <tr class="" v-for="s in searchList" :key="s" >
-     <td>{{s+" "}} </td> 
-     <td class="" style="width:1rem"><i class="fa fa-trash" style="font-size:20px" @click="deleteItem(s)"></i></td>
-    </tr>
-  </table>
-  <br>
-  <br>
 
-  <button v-if="searchList.length!==0" class="btn btn-primary"  data-toggle="modal" data-target="#resultsModal" value="Submit" @click="submit">Submit</button>
-
-  <br>
-  <br>
-  
-
-  <div class="modal fade" id="resultsModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
-  <div class="modal-dialog modal-dialog-centered" role="document">
-    <div class="modal-content">
-      <div class="modal-header">
-        <h5 class="modal-title" id="exampleModalLongTitle">Results of Recipe analysis</h5>
-        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-          <span aria-hidden="true">&times;</span>
-        </button>
-      </div>
-      <div class="modal-body"> 
-        <b style="color:darkorchid">No of ingredients : {{searchList.length}}</b>
-        <p data-toggle="tooltip" data-placement="top" title="Tooltip on top"> </p>
-        <div v-if="loading1===true">
-        <div class="spinner-border text-success" role="status">
-        <span class="sr-only">Loading...</span>
-        </div>
-      </div> 
-
-    <div class="container" v-else-if="Object.keys(post_response).length!==0">
-         <table class="centred">
-          <tr > <b> Calories: {{post_response.calories}} </b> </tr> 
-          <tr> <b> Weight : {{round(post_response.totalWeight)}} g </b> </tr>
-         <b>
-         <tr v-for="l in post_response.dietLabels" :key="l">
-        {{l}}
-      </tr> 
-      </b>
-
-        </table>
-  </div>
-      </div>
-      <div class="modal-footer">
-        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-        
-      </div>
-    </div>
-  </div>
-</div> 
-  
+<analysis :ingredient="searchItem"/>
   <br>
   <br>
 
@@ -169,15 +37,13 @@
 
 import paths from "@/assets/pathlist.json" 
 import Axios from 'axios' 
-//import FoodItemList from './Food_Item_List/FoodItemList.vue'
-//import IngredientsForm from './Ingredients_Form/IngredientsForm.vue'
-
-
-
+import FoodItemList from './Food_Item_List/FoodItemList.vue'
+import IngredientsForm from './Ingredients_Form/IngredientsForm.vue'
+import Analysis from './Analysis/Analysis.vue'
 
 
 export default {
-  components: { },
+  components: { FoodItemList, IngredientsForm, Analysis},
   setup () {
     return {
     }
@@ -205,18 +71,12 @@ export default {
     }
   },
 
-  methods: 
-        {   
-           add() { 
-      if(this.qty!==0 && this.unit!=='' && this.food!=='' ) {
-      this.searchItem= this.qty +" "+ this.unit +" "+ this.food;
-      
-      this.searchList.push(this.searchItem);
-      }
-      else {
-        alert("Enter a value for each field before adding");
-      }
-    }, 
+  methods:  {
+         
+           add(event) { 
+             this.searchItem=event;
+    
+        }, 
 
        deleteItem(foodItem) { 
           alert('The item "'+foodItem+'" is going to be deleted');
@@ -274,7 +134,7 @@ export default {
 
 </script>
 
-<style >
+<style>
 
 main-div{
   display: flexbox;
@@ -332,15 +192,22 @@ h2{
   
 }
 
-#ingredient-list{
-  width:16rem;
-  margin-left:auto; 
-  margin-right:auto;
-}
 
 p{
   color: seagreen;
 }
+
+
+.results {
+  border: 0px solid darkseagreen;
+  align-self: center;
+}
+
+#ingredient-list{
+  width:16rem;
+  margin-left:auto; 
+  margin-right:auto;
+}  
 
 .container {
      justify-content: center;
@@ -350,10 +217,7 @@ p{
      /*margin-left:240px; */
  } 
 
-.results {
-  border: 0px solid darkseagreen;
-  align-self: center;
-}
+
 
 .newrow {
   border: 0px;

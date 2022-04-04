@@ -20,7 +20,7 @@
     <label for="food">Food item</label>
     <input type="text" id="food" class="form-control" v-model="food"> 
 <br>
-    <button id="" class="btn btn-info"  @click="add" style="width:75px"> Add </button>
+    <button id="" class="btn btn-info"  @click="$emit('sendIngredient',addedIngredient)" style="width:75px"> Add </button>
 
   </div>
   </div> 
@@ -30,20 +30,18 @@
 </template>
 
 <script>
-import Axios from 'axios'
+
 
     export default {
+        emits:['sendIngredient'],
         data(){
             return {
-                app_id:"4cc00ec3",
-                app_key:'3ffd1eb7d2245ac2cf44739c395c9ff0',
-                loading1:false,
-                err:'',
+                 
                 qty:0,
                 unit:'',
                 food:'',
                 searchItem:'',
-                searchList:[] ,
+                
                 post_data :{
                  "ingr":[]
                     },
@@ -52,40 +50,29 @@ import Axios from 'axios'
             }
         },
 
+        computed:{
+            addedIngredient () {
+                var ingredient='';
+                if(this.qty!==0 && this.unit!=='' && this.food!=='' ) {
+                ingredient= this.qty +" "+ this.unit +" "+ this.food; 
+                 }
+                 return ingredient;
+            }
+        },
+
   methods: {
     add() { 
+        var ingredient='';
       if(this.qty!==0 && this.unit!=='' && this.food!=='' ) {
       this.searchItem= this.qty +" "+ this.unit +" "+ this.food;
-      
-      this.searchList.push(this.searchItem);
+      ingredient=this.searchItem;
       }
       else {
         alert("Enter a value for each field before adding");
       }
+
+      return ingredient;
     }, 
-
-    deleteItem(foodItem) { 
-      alert('The item "'+foodItem+'" is going to be deleted');
-      this.searchList=this.searchList.filter(function(value){
-        return !(value===foodItem);
-       }); 
-    },
-
-    round(n){
-       return n.toFixed(2);
-    },
-
-    submit () {
-      
-      this.post_data.ingr=this.searchList;
-      this.loading1=true;
-      Axios.post("https://api.edamam.com/api/nutrition-details?app_id="+this.app_id+"&app_key="+this.app_key, this.post_data).then(response=> { 
-             console.log('SUCCESS', response.data);
-             this.post_response=response.data;
-             this.loading1=false;
-
-             });
-    },
 
    
   }

@@ -14,10 +14,10 @@
       <div  class="results" v-else-if="Object.keys(get_response).length!==0"> 
         <img class="foodImage" :src="require(`@/${src}`)" >
         <table class="centred">
-         <tr>Calories: {{get_response.calories}}</tr>
-         <tr> Weight: {{get_response.totalWeight}} g</tr>
+         <tr>CALORIES: {{get_response.calories}}</tr>
+         <tr> WEIGHT: {{get_response.totalWeight}} g</tr>
          <tr v-for="l in get_response.dietLabels" :key="l">
-           {{l}}
+           {{removeUnderscore(l)}}
         </tr> 
        </table>
        
@@ -102,7 +102,12 @@ import Axios from 'axios'
                    
                });
                return path;
-          }
+          },
+
+           removeUnderscore (label) {
+            var newLabel=  label.replaceAll('_',' ');
+            return newLabel;
+            }
         }
     }
 </script>

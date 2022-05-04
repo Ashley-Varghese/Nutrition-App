@@ -36,7 +36,6 @@
 //api-key=3ffd1eb7d2245ac2cf44739c395c9ff0, 862787ee84da281d5b0b31e3a70df086	
 
 import paths from "@/assets/pathlist.json" 
-import Axios from 'axios' 
 import FoodItemList from './Food_Item_List/FoodItemList.vue'
 import IngredientsForm from './Ingredients_Form/IngredientsForm.vue'
 import Analysis from './Analysis/Analysis.vue'
@@ -51,16 +50,7 @@ export default {
 
   data () {
     return {
-      app_id:"4cc00ec3",
-      app_key:'3ffd1eb7d2245ac2cf44739c395c9ff0',
-      err:'',
-      src:'',
-      plist : paths,
-      loading1:false,
-      loading:false,
-      qty:0,
-      unit:'',
-      food:'',
+
       searchItem:'',
       searchList:[] ,
       post_data :{
@@ -75,59 +65,8 @@ export default {
          
            add(event) { 
              this.searchItem=event;
-    
         }, 
 
-       deleteItem(foodItem) { 
-          alert('The item "'+foodItem+'" is going to be deleted');
-          this.searchList=this.searchList.filter(function(value){
-          return !(value===foodItem);
-         }); 
-      },
-
-      round(n){
-         return n.toFixed(2);
-      },
-
-      submit () {
-      
-        this.post_data.ingr=this.searchList;
-        this.loading1=true;
-        Axios.post("https://api.edamam.com/api/nutrition-details?app_id="+this.app_id+"&app_key="+this.app_key, this.post_data).then(response=> { 
-             console.log('SUCCESS', response.data);
-             this.post_response=response.data;
-             this.loading1=false;
-
-             });
-    },
-
-            getFacts(ingr){
-            this.loading=true;
-            this.src=this.getPath(ingr);
-            Axios.get("https://api.edamam.com/api/nutrition-data?app_id="+this.app_id+"&app_key="+this.app_key + "&nutrition-type=cooking&ingr="+ingr).then(response=> {
-                this.get_response=response.data;
-                this.loading=false;
-            }).catch(err=> {
-                this.loading=false;
-                this.err="An error has occurred. Please try again";
-                console.log('Error',err);
-            });
-
-              },
-
-              getPath (foodname) {
-              var path = "";
-             // console.log("blank");
-              this.plist.forEach(element => {
-                   if(element.name===foodname)
-                   {
-                       path= element.path;
-                       console.log("Path: " +path);
-                   }
-                   
-               });
-               return path;
-          }
         }
 
 }

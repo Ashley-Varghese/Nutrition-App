@@ -7,7 +7,8 @@ export default createStore({
         post_data :{
             "ingr":[]
              },
-        apiResponse:{},
+        responsePOST:{},
+        reponseGET:{},
         loading:false,
         app_id:"4cc00ec3",
         app_key:'3ffd1eb7d2245ac2cf44739c395c9ff0',
@@ -27,13 +28,12 @@ export default createStore({
           })
       },
 
-      GET_POST_RESPONSE () {
-        Axios.post("https://api.edamam.com/api/nutrition-details?app_id="+this.app_id+"&app_key="+this.app_key, this.post_data).then(response=> { 
-            console.log('SUCCESS', response.data);
-            this.apiResponse=response.data;
-            this.loading=false;
+      ADD_POST_RESPONSE (state, response) {
+        state.responsePOST= response;
+      },
 
-            });
+      ADD_GET_RESPONSE (state, response) {
+         state.reponseGET=response;
       },
 
       ADD_POST_DATA (state, ingr){
@@ -56,7 +56,16 @@ export default createStore({
       submitPOST (context) {
         context.commit('ADD_POST_DATA',this.state.ingredientList);
         context.commit('UPDATE_LOADING',true);
-        context.commit('GET_POST_RESPONSE');
-      }
+        Axios.post("https://api.edamam.com/api/nutrition-details?app_id="+this.state.app_id+"&app_key="+this.state.app_key, this.state.post_data).then(response=> { 
+            console.log('SUCCESS', response.data);
+            context.commit('ADD_POST_RESPONSE', response.data);
+            context.commit('UPDATE_LOADING',false);
+            });
+      },
+
+      /*submitGET (context, payload) {
+        context.commit('UPDATE_LOADING',true);
+
+      } */
   }
 })

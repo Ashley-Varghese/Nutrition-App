@@ -1,6 +1,9 @@
 import { mount } from '@vue/test-utils'
 import App from './../src/App.vue'
 import Nutrition from "@/components/Nutrition.vue"
+//import Analysis from '@/components/Analysis'
+//import IngredientsForm from '@/components/IngredientsForm'
+//import FoodItemList from '@/components/FoodItemList'
 
 describe('Mounted App', () => {
     const wrapper = mount(App);
@@ -11,7 +14,8 @@ describe('Mounted App', () => {
   })
 
   
-
+  
+/*
 describe("FormSubmitter", () => {
   it("adds a new item to the list with the add button", async () => {
     const wrapper = mount(Nutrition)
